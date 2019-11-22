@@ -1,0 +1,287 @@
+<html>
+
+<head>
+
+<title>Jogo da velha</title>
+</head>
+
+<body>
+<script language="LiveScript">
+
+        <!-- 
+
+		step = 0;
+
+		diff=3;
+
+		// change board when button is clicked
+
+        function clear_all(form) {
+
+			step = 0;
+
+			for (i=0;i<9; ++i) {
+
+				position="a"+i;
+
+				form[position].value="";
+
+			}
+
+		}
+
+		// change board when button is clicked
+
+        function clickit(field) {
+
+		if (step == -1) {alert("Reset aí macho véi"); return;}
+
+        position=field.name.substring(1,2,1);
+
+        position = 'a'+position;
+
+		if (field.form[position].value !="") {alert("Pode mover pra cá não macho"); return;}
+
+        field.form[position].value="X";
+
+        if (eval_pos(field.form)) {
+
+			field.form.output.value="O homi é bom!!"; 
+
+			step = -1;
+
+			return;
+
+		}
+
+        position=get_move(field.form);
+
+      
+
+		if (position=="") {
+
+			field.form.output.value="Deu empate ó."; 
+
+			step = -1;
+
+			return;
+
+		}
+
+        field.form[position].value="O";
+
+        if (eval_pos(field.form)) {
+
+			field.form.output.value="Perdeu caba besta!";
+
+			step = -1;
+
+		}
+
+        }
+
+
+
+		// see if there is a winner
+
+        function eval_pos(form) {
+
+   		if ((form.a0.value!="" && 
+
+			form.a0.value==form.a3.value && form.a0.value==form.a6.value)||
+
+   		   (form.a0.value!="" 
+
+			&& form.a0.value==form.a1.value && form.a0.value==form.a2.value) ||
+
+   		   (form.a0.value!="" 
+
+			&& form.a0.value==form.a4.value && form.a0.value==form.a8.value) ||
+
+   		   (form.a1.value!="" 
+
+			&& form.a1.value==form.a4.value && form.a1.value==form.a7.value) ||
+
+   		   (form.a2.value!="" 
+
+			&& form.a2.value==form.a5.value && form.a2.value==form.a8.value) ||
+
+   		   (form.a2.value!="" 
+
+			&& form.a2.value==form.a4.value && form.a2.value==form.a6.value) ||
+
+   		   (form.a3.value!="" 
+
+			&& form.a3.value==form.a4.value && form.a3.value==form.a5.value) ||
+
+   		   (form.a6.value!="" 
+
+			&& form.a6.value==form.a7.value && form.a6.value==form.a8.value))
+
+			return true;
+
+		else	
+
+           return false;
+
+        }
+
+
+
+		function f(a) {
+
+		if (a == "") return "."; else return a;
+
+		}
+
+
+
+		// get position for move.
+
+        function comp_move(form,player,weight,depth) {
+
+            var cost;
+
+			var bestcost=-2;
+
+			var position;
+
+			var newplayer;
+
+			if (player=="X") newplayer="O"; else newplayer="X";
+
+			if (depth==diff) return 0;
+
+			if (eval_pos(form)) return 1;
+
+			for (var i=0; i<9; ++i) {
+
+				position='a'+i;
+
+				if (form[position].value != "")
+
+					continue;
+
+				form[position].value=player;
+
+				cost = comp_move(form,newplayer, -weight, depth+1);
+
+				if (cost > bestcost) {
+
+					bestcost=cost;
+
+					if (cost==1) i=9;
+
+				}
+
+				form[position].value="";
+
+			}
+
+			if (bestcost==-2) bestcost=0;
+
+			return(-bestcost);
+
+		}
+
+
+
+		// get position for move.
+
+        function get_move(form) {
+
+			var cost;
+
+			var bestcost=-2;
+
+			bestmove="";
+
+			// don't think about first move.
+
+			if (step++ == 0)
+
+				if (form.a4.value=="") 
+
+					return "a4";
+
+				else 
+
+				if (form.a0.value=="") 
+
+					return "a0";
+
+
+
+			for (var i=0; i<9; ++i) {
+
+				localposition='a'+i;
+
+				if (form[localposition].value != "")
+
+					continue;
+
+				form[localposition].value="O";
+
+				cost=comp_move(form,"X", -1, 0);
+
+				if (cost > bestcost) {
+
+					if (cost==1) i=9;
+
+					bestmove=localposition;
+
+					bestcost=cost;
+
+				}
+
+				form[localposition].value="";
+
+			}
+
+			return bestmove;
+
+        }
+
+
+
+		// complain if user attempts to change board
+
+        function complain(field) {
+
+			field.form.output.focus(); // put focus eleswhere
+
+			alert("Clique no botão");
+
+        }
+
+	//a href="http://www.ucsd.edu/
+
+        // the end -->
+
+      </script>
+
+
+<form>
+  <div align="center"><center><p><input type="text" size="1" name="a0" onfocus="complain(this)"> <input type="button" name="b0" onclick="clickit(this)"> <input type="text" size="1" name="a1" onfocus="complain(this)"> <input type="button" name="b1" onclick="clickit(this)"> <input type="text" size="1" name="a2" onfocus="complain(this)"> <input type="button" name="b2" onclick="clickit(this)"> <br>
+  <input type="text" size="1" name="a3" onfocus="complain(this)"> <input type="button" name="b3" onclick="clickit(this)"> <input type="text" size="1" name="a4" onfocus="complain(this)"> <input type="button" name="b4" onclick="clickit(this)"> <input type="text" size="1" name="a5" onfocus="complain(this)"> <input type="button" name="b5" onclick="clickit(this)"> <br>
+  <input type="text" size="1" name="a6" onfocus="complain(this)"> <input type="button" name="b6" onclick="clickit(this)"> <input type="text" size="1" name="a7" onfocus="complain(this)"> <input type="button" name="b7" onclick="clickit(this)"> <input type="text" size="1" name="a8" onfocus="complain(this)"> <input type="button" name="b8" onclick="clickit(this)"> <br>
+  <br>
+  <br>
+  <font size="3" face="Comic Sans MS, arial">Mensagem: <input type="text" size="20" name="output"><br>
+  <br>
+  Nível de Dificuldade: <select name="difficulty" size="1" onchange="diff=form.difficulty[form.difficulty.selectedIndex].value;">
+    <option value="1"> Muito Fácil </option>
+    <option value="2"> Fácil </option>
+    <option selected value="3"> Médio </option>
+    <option value="4"> Difícil </option>
+  </select> </font></p>
+  </center></div><div align="center"><center><p><font size="3" face="Comic Sans MS, arial"><input type="button" value="Computador Movendo Primeiro" onclick="
+
+		if (!step++) this.form.a4.value='O';"> </font></p>
+  </center></div><div align="center"><center><p><font size="3" face="Comic Sans MS, arial"><input type="reset" value="Reiniciar" onclick="clear_all(this.form)"> </font></p>
+  </center></div>
+</form>
+
+<p align="center">&nbsp;</p>
+</body>
+</html>
